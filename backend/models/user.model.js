@@ -51,11 +51,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    likedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId, //16 characters
+        ref: "Post",
+        default: [],
+      },
+    ]
   },
   { timestamps: true }
 ); //  member since july 2021 create
 
-
-const User = mongoose.model("User",userSchema); //in database users
+const User = mongoose.model("User", userSchema); //in database users
 
 export default User;
