@@ -77,8 +77,8 @@ const ProfilePage = () => {
       toast.success("Profile Updated Successfully");
       // Invalidate the query to refetch the data
       Promise.all([
-          queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-          queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
+        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+        queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
       ]);
     },
     onError: (error) => {
@@ -194,7 +194,11 @@ const ProfilePage = () => {
                 {(coverImg || profileImg) && (
                   <button
                     className="btn btn-primary rounded-full btn-sm text-white px-4 ml-2"
-                    onClick={() => updateProfile()}
+                    onClick={async () => {
+                      await updateProfile({coverImg,profileImg});
+                      setProfileImg(null);
+                      setCoverImg(null);
+                    }}
                   >
                     {isupdatingProfile ? "Updating..." : "Update"}
                   </button>
