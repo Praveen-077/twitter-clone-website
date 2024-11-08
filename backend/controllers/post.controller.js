@@ -55,7 +55,11 @@ export const likeUnlikePost = async (req, res) => {
           $pull: { likedPosts: postId },
         }
       );
-      res.status(200).json({ message: "Post unliked successfully" });
+
+      const updatedLikes = post.likes.filter(
+        (id) => id.toString() !== userId.toString()
+      );
+      res.status(200).json(updatedLikes);
     } else {
       // Like post
       post.likes.push(userId);
@@ -72,9 +76,9 @@ export const likeUnlikePost = async (req, res) => {
         to: post.user,
         type: "like",
       });
-
+      const updatedLikes = post.likes;
       await notification.save();
-      res.status(200).json({ message: "Post Liked Successfully" });
+      res.status(200).json(updatedLikes);
     }
   } catch (error) {
     console.log("Error in delete Post controller", error.message);
@@ -216,7 +220,7 @@ export const getUserPosts = async (req, res) => {
         path: "comments.user",
         select: "-password",
       });
-      res.status(200).json(posts);
+    res.status(200).json(posts);
   } catch (error) {
     console.log("Error in get Followed Posts controller", error.message);
     res.status(500).json({ error: "Internal Server Error" });
